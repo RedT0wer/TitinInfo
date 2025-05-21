@@ -1,0 +1,120 @@
+import sys
+import time
+from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QRadioButton, QWidget
+from Application import Application
+from FabricResponse import FabricResponse
+
+class MyApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MyApp, self).__init__()
+        self.app = Application()
+        self.ui = uic.loadUi("mainwindow.ui", self)
+        self.ui.pull_request.clicked.connect(self.PullRequest)
+        self.ui.find.clicked.connect(self.choiseFunction)
+        self.ui.replacement.clicked.connect(self.choiseFunction)
+        self.ui.insert.clicked.connect(self.choiseFunction)
+        self.ui.delete_nucleotide.clicked.connect(self.choiseFunction)
+        self.ui.delete_exon.clicked.connect(self.choiseFunction)
+
+    def PullRequest(self):
+        try:
+            st = time.time()
+            request = self.getRequest()
+            response = self.app.getData(request)
+            html = FabricResponse.getResponse(response)
+            self.app_finished(html, False)
+        except Exception as e:
+            self.app_finished("", True)
+            print(e)
+        finally:
+            print(time.time() - st)
+
+    def app_finished(self, html, status):
+        self.ui.response_browser.setHtml(html)
+        self.ui.checkException.setChecked(status)
+
+    def getRequest(self):
+        button = self.getActiveButton()
+        function = button.objectName()
+        if function == "find":
+            return self.buildingRequestFind()
+        elif function == "insert":
+            return self.buildingRequestInsert()
+        elif function == "replacement":
+            return self.buildingRequestReplacement()
+        elif function == "delete_nucleotide":
+            return self.buildingRequestDeleteNucleotide()
+        elif function == "delete_exon":
+            return self.buildingRequestDeleteExon()
+
+    def buildingRequestFind(self):
+        request = {}
+        request["function"] = "find"
+        request["origin"] = self.ui.origin.text()
+        request["isoform"] = self.ui.isoform.text()
+        request["number"] = self.ui.find_number.toPlainText()
+        return request
+
+    def buildingRequestInsert(self):
+        request = {}
+        request["function"] = "insert"
+        request["origin"] = self.ui.origin.text()
+        request["isoform"] = self.ui.isoform.text()
+        request["st"] = self.ui.insert_st.toPlainText()
+        request["end"] = self.ui.insert_end.toPlainText()
+        request["newSequense"] = self.ui.insert_nucleotide.toPlainText()
+        return request
+
+    def buildingRequestReplacement(self):
+        request = {}
+        request["function"] = "replacement"
+        request["origin"] = self.ui.origin.text()
+        request["isoform"] = self.ui.isoform.text()
+        request["number"] = self.ui.replacement_number.toPlainText()
+        request["nucleotide"] = self.ui.replacement_nucleotide.toPlainText()
+        return request
+
+    def buildingRequestDeleteNucleotide(self):
+        request = {}
+        request["function"] = "delete_nucleotide"
+        request["origin"] = self.ui.origin.text()
+        request["isoform"] = self.ui.isoform.text()
+        request["st"] = self.ui.delete_nucleotide_st.toPlainText()
+        request["end"] = self.ui.delete_nucleotide_end.toPlainText()
+        return request
+
+    def buildingRequestDeleteExon(self):
+        request = {}
+        request["function"] = "delete_exon"
+        request["origin"] = self.ui.origin.text()
+        request["isoform"] = self.ui.isoform.text()
+        request["number"] = self.ui.delete_exon_number.toPlainText()
+        return request
+
+    def choiseFunction(self):
+        button = self.getActiveButton()
+        self.setEnabledFalseParams()
+        self.setEnabledTrueToFunction(button)
+
+    def setEnabledFalseParams(self):
+        for element in self.ui.params_request.findChildren(QWidget):
+            if element.inherits("QLabel") or element.inherits("QTextEdit"):
+                element.setEnabled(False)
+
+    def setEnabledTrueToFunction(self, button):
+        for element in self.ui.params_request.findChildren(QWidget):
+            if (element.inherits("QLabel") or element.inherits("QTextEdit")) and button.objectName() in element.objectName():
+                element.setEnabled(True)
+
+    def getActiveButton(self):
+        for button in self.ui.choise_function.findChildren(QRadioButton):
+            if button.isChecked():
+                return button
+
+
+if __name__ == '__main__':
+    application = QtWidgets.QApplication(sys.argv)
+    window = MyApp()
+    window.show()
+    application.exec()
