@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QRadioButton, QWidget
 from Application import Application
 from FabricResponse import FabricResponse
+from Settings.Config import settings
 
 class MyApp(QtWidgets.QMainWindow):
     def __init__(self):
@@ -37,20 +38,20 @@ class MyApp(QtWidgets.QMainWindow):
     def getRequest(self):
         button = self.getActiveButton()
         function = button.objectName()
-        if function == "find":
+        if function == settings.find:
             return self.buildingRequestFind()
-        elif function == "insert":
+        elif function == settings.insert:
             return self.buildingRequestInsert()
-        elif function == "replacement":
+        elif function == settings.replacement:
             return self.buildingRequestReplacement()
-        elif function == "delete_nucleotide":
+        elif function == settings.delete_nucleotide:
             return self.buildingRequestDeleteNucleotide()
-        elif function == "delete_exon":
+        elif function == settings.delete_exon:
             return self.buildingRequestDeleteExon()
 
     def buildingRequestFind(self):
         request = {}
-        request["function"] = "find"
+        request["function"] = settings.find
         request["origin"] = self.ui.origin.text()
         request["isoform"] = self.ui.isoform.text()
         request["number"] = self.ui.find_number.toPlainText()
@@ -58,7 +59,7 @@ class MyApp(QtWidgets.QMainWindow):
 
     def buildingRequestInsert(self):
         request = {}
-        request["function"] = "insert"
+        request["function"] = settings.insert
         request["origin"] = self.ui.origin.text()
         request["isoform"] = self.ui.isoform.text()
         request["st"] = self.ui.insert_st.toPlainText()
@@ -68,7 +69,7 @@ class MyApp(QtWidgets.QMainWindow):
 
     def buildingRequestReplacement(self):
         request = {}
-        request["function"] = "replacement"
+        request["function"] = settings.replacement
         request["origin"] = self.ui.origin.text()
         request["isoform"] = self.ui.isoform.text()
         request["number"] = self.ui.replacement_number.toPlainText()
@@ -77,7 +78,7 @@ class MyApp(QtWidgets.QMainWindow):
 
     def buildingRequestDeleteNucleotide(self):
         request = {}
-        request["function"] = "delete_nucleotide"
+        request["function"] = settings.delete_nucleotide
         request["origin"] = self.ui.origin.text()
         request["isoform"] = self.ui.isoform.text()
         request["st"] = self.ui.delete_nucleotide_st.toPlainText()
@@ -86,7 +87,7 @@ class MyApp(QtWidgets.QMainWindow):
 
     def buildingRequestDeleteExon(self):
         request = {}
-        request["function"] = "delete_exon"
+        request["function"] = settings.delete_exon
         request["origin"] = self.ui.origin.text()
         request["isoform"] = self.ui.isoform.text()
         request["number"] = self.ui.delete_exon_number.toPlainText()

@@ -3,15 +3,15 @@ from WebPages.DeleteNucOutput import DeleteNucOutputDomain, DeleteNucOutputExon
 from WebPages.FindOutput import FindOutputDomain,FindOutputExon
 from WebPages.InsertOutput import InsertOutputDomain, InsertOutputExon
 from WebPages.ReplacementOutput import ReplacementOutputDomain, ReplacementOutputExon
-
+from Settings.Config import settings
 
 class FabricResponse:
     Function = {
-        "find" : (FindOutputDomain, FindOutputExon),
-        "insert" : (InsertOutputDomain, InsertOutputExon),
-        "replacement" : (ReplacementOutputDomain, ReplacementOutputExon),
-        "delete_nucleotide" : (DeleteNucOutputDomain, DeleteNucOutputExon),
-        "delete_exon" : (DeleteExonOutputDomain, DeleteExonOutputExon),
+        settings.find : (FindOutputDomain, FindOutputExon),
+        settings.insert : (InsertOutputDomain, InsertOutputExon),
+        settings.replacement : (ReplacementOutputDomain, ReplacementOutputExon),
+        settings.delete_nucleotide : (DeleteNucOutputDomain, DeleteNucOutputExon),
+        settings.delete_exon : (DeleteExonOutputDomain, DeleteExonOutputExon),
     }
     @classmethod
     def getResponse(cls, response):

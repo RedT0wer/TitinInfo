@@ -8,6 +8,7 @@ from Controller.Function.Replacement import replacement
 from Controller.Function.Insert import insert
 from Controller.Function.DeleteNucleotide import deleteNucleotide
 from Data.Data import Data
+from Settings.Config import settings
 import asyncio
 
 class Application():
@@ -16,11 +17,11 @@ class Application():
         self.Data = Data()
         self.Controller = Controller()
         self.FunctionObject = {
-            "find": find,
-            "insert": insert,
-            "replacement": replacement,
-            "delete_nucleotide": deleteNucleotide,
-            "delete_exon": deleteExon,
+            settings.find: find,
+            settings.insert: insert,
+            settings.replacement: replacement,
+            settings.delete_nucleotide: deleteNucleotide,
+            settings.delete_exon: deleteExon,
         }
 
     def __parsingRequest(self, request):
