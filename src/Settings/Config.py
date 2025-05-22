@@ -6,6 +6,6 @@ class Settings(BaseSettings):
     replacement: str
     delete_nucleotide: str
     delete_exon: str
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file="Settings/.env")
 
 settings = Settings()
