@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QRadioButton, QWidget
 from Application import Application
 from FabricResponse import FabricResponse
-from Settings.Config import settings
+from Settings.Settings import settings
 
 class MyApp(QtWidgets.QMainWindow):
     def __init__(self):

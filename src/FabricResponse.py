@@ -3,7 +3,7 @@ from WebPages.DeleteNucOutput import DeleteNucOutputDomain, DeleteNucOutputExon
 from WebPages.FindOutput import FindOutputDomain,FindOutputExon
 from WebPages.InsertOutput import InsertOutputDomain, InsertOutputExon
 from WebPages.ReplacementOutput import ReplacementOutputDomain, ReplacementOutputExon
-from Settings.Config import settings
+from Settings.Settings import settings
 
 class FabricResponse:
     Function = {
