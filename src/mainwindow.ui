@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TitinInfo</class>
+ <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1220</width>
+    <width>1056</width>
     <height>858</height>
    </rect>
   </property>
@@ -61,7 +61,7 @@
            </size>
           </property>
           <property name="text">
-           <string>ENST00000460472</string>
+           <string>ENST00000342992</string>
           </property>
           <property name="placeholderText">
            <string>ENST00000460472...</string>
@@ -792,7 +792,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1220</width>
+     <width>1056</width>
      <height>21</height>
     </rect>
    </property>
