@@ -1,3 +1,5 @@
+from Api.WebSite.NBCIExons import nbciExons
+from Api.WebSite.NBCISequense import nbciSequense
 from Data.DictProtein.DictProtein import DictProtein
 from Data.DictExons.Exon import Exon
 from Data.DictExons.DictExons import DictExons
@@ -25,8 +27,8 @@ class Data:
         self.DictProtein.buildingListObject()
 
     async def __buildingDictExons(self, managerApi, nucleotides):
-        stream1 = await managerApi.getData(nucleotides, ensemblSequense)
-        stream2 = await managerApi.getData(nucleotides, ensemblExons)
+        stream1 = await managerApi.getData(nucleotides, ensemblSequense if nucleotides.startswith('ENST') else nbciSequense)
+        stream2 = await managerApi.getData(nucleotides, ensemblExons if nucleotides.startswith('ENST') else nbciExons)
         return DictExons(stream1, stream2)
 
     async def __buildingDictProtein(self, managerApi, protein):

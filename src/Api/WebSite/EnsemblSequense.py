@@ -1,5 +1,4 @@
 from typing import Dict
-from Settings.NucleotideIdentifier import nucleotideIdentifier
 import aiohttp
 import ssl
 
@@ -16,7 +15,7 @@ class EnsemblSequense():
                 return await self.processing(response.json())
 
     async def processing(self, response: Dict):
-        return (await response)["seq"]
+        return ((await response)["seq"], -1, -1)
 
     async def getData(self, identifier: str):
         return await self.readURL(identifier)

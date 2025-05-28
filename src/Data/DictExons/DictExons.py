@@ -13,7 +13,7 @@ class DictExons:
         self.createExons(stream2)
 
     def createSequense(self, stream1) -> SequenseN:
-        self.SequenseN = SequenseN(stream1)
+        self.SequenseN = SequenseN(*stream1)
 
     def createExons(self, stream2) -> List[Exon]:
         seq = self.SequenseN.getFullSequense()

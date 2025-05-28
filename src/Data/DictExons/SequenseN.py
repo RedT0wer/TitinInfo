@@ -1,7 +1,11 @@
 class SequenseN:
-    def __init__(self, sequense: str):
-        index_utr5 = self.createUtr5(sequense)
-        index_utr3 = self.createUtr3(sequense)
+    def __init__(self, sequense: str, indexUtr5: int, indexUtr3: int):
+        if (indexUtr5, indexUtr3) == (-1, -1):
+            index_utr5 = self.createUtr5(sequense)
+            index_utr3 = self.createUtr3(sequense)
+        else:
+            index_utr5 = indexUtr5
+            index_utr3 = indexUtr3 + 1
         self.utr5 = sequense[:index_utr5]
         self.utr3 = sequense[index_utr3:]
         self.sequense = sequense[index_utr5:index_utr3]
