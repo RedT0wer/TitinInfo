@@ -6,7 +6,6 @@ import ssl
 class EnsemblSequense():
     def __init__(self):
         self.url = "https://rest.ensembl.org/sequence/id/"
-        self.identifier = ''
         self.params = ["mask_feature=1", "type=cdna", "content-type=application/json"]
 
     async def readURL(self, identifier: str):
@@ -17,10 +16,7 @@ class EnsemblSequense():
                 return await self.processing(response.json())
 
     async def processing(self, response: Dict):
-        seq = (await response)["seq"]
-        if hasattr(nucleotideIdentifier, f"{self.identifier.lower()}_utr5"):
-            seq = eval(f"nucleotideIdentifier.{self.identifier.lower()}_utr5") + seq
-        return seq
+        return (await response)["seq"]
 
     async def getData(self, identifier: str):
         return await self.readURL(identifier)
