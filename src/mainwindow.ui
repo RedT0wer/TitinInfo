@@ -29,8 +29,8 @@
        <attribute name="title">
         <string>Запросы</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
          <widget class="QLineEdit" name="origin">
           <property name="enabled">
            <bool>true</bool>
@@ -49,7 +49,14 @@
           </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="view_domain">
+          <property name="text">
+           <string>Просмотр доменов</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
          <widget class="QLineEdit" name="isoform">
           <property name="enabled">
            <bool>true</bool>
@@ -61,14 +68,21 @@
            </size>
           </property>
           <property name="text">
-           <string>ENST00000359218</string>
+           <string>NM_133432</string>
           </property>
           <property name="placeholderText">
            <string>ENST00000460472...</string>
           </property>
          </widget>
         </item>
-        <item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="text">
+           <string>Просмотр экзонов</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
          <widget class="QGroupBox" name="groupBox">
           <property name="maximumSize">
            <size>
@@ -232,7 +246,7 @@
              <property name="minimumSize">
               <size>
                <width>650</width>
-               <height>250</height>
+               <height>200</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -285,6 +299,12 @@
                   </property>
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
+                  </property>
+                  <property name="sizeAdjustPolicy">
+                   <enum>QAbstractScrollArea::AdjustIgnored</enum>
+                  </property>
+                  <property name="lineWrapMode">
+                   <enum>QTextEdit::NoWrap</enum>
                   </property>
                  </widget>
                 </item>
@@ -344,6 +364,9 @@
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
                   </property>
+                  <property name="lineWrapMode">
+                   <enum>QTextEdit::NoWrap</enum>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -390,6 +413,9 @@
                   </property>
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
+                  </property>
+                  <property name="lineWrapMode">
+                   <enum>QTextEdit::NoWrap</enum>
                   </property>
                  </widget>
                 </item>
@@ -449,6 +475,9 @@
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
                   </property>
+                  <property name="lineWrapMode">
+                   <enum>QTextEdit::NoWrap</enum>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -496,6 +525,9 @@
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
                   </property>
+                  <property name="lineWrapMode">
+                   <enum>QTextEdit::NoWrap</enum>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -527,7 +559,7 @@
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>100</width>
+                    <width>70</width>
                     <height>30</height>
                    </size>
                   </property>
@@ -542,6 +574,9 @@
                   </property>
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
+                  </property>
+                  <property name="lineWrapMode">
+                   <enum>QTextEdit::NoWrap</enum>
                   </property>
                  </widget>
                 </item>
@@ -594,6 +629,9 @@
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
                   </property>
+                  <property name="lineWrapMode">
+                   <enum>QTextEdit::NoWrap</enum>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -640,6 +678,9 @@
                   </property>
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
+                  </property>
+                  <property name="lineWrapMode">
+                   <enum>QTextEdit::NoWrap</enum>
                   </property>
                  </widget>
                 </item>
@@ -699,6 +740,9 @@
                   <property name="horizontalScrollBarPolicy">
                    <enum>Qt::ScrollBarAlwaysOff</enum>
                   </property>
+                  <property name="lineWrapMode">
+                   <enum>QTextEdit::NoWrap</enum>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -756,7 +800,7 @@
           </layout>
          </widget>
         </item>
-        <item>
+        <item row="3" column="0" colspan="2">
          <widget class="QTextBrowser" name="response_browser">
           <property name="minimumSize">
            <size>
@@ -766,7 +810,7 @@
           </property>
          </widget>
         </item>
-        <item>
+        <item row="4" column="0" colspan="2">
          <widget class="QCheckBox" name="checkException">
           <property name="enabled">
            <bool>false</bool>

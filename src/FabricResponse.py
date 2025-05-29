@@ -1,8 +1,8 @@
-from WebPages.DeleteExonOutput import DeleteExonOutputDomain, DeleteExonOutputExon
-from WebPages.DeleteNucOutput import DeleteNucOutputDomain, DeleteNucOutputExon
-from WebPages.FindOutput import FindOutputDomain,FindOutputExon
-from WebPages.InsertOutput import InsertOutputDomain, InsertOutputExon
-from WebPages.ReplacementOutput import ReplacementOutputDomain, ReplacementOutputExon
+from WebPages.ResponseOutput.DeleteExonOutput import DeleteExonOutputDomain, DeleteExonOutputExon
+from WebPages.ResponseOutput.DeleteNucOutput import DeleteNucOutputDomain, DeleteNucOutputExon
+from WebPages.ResponseOutput.FindOutput import FindOutputDomain,FindOutputExon
+from WebPages.ResponseOutput.InsertOutput import InsertOutputDomain, InsertOutputExon
+from WebPages.ResponseOutput.ReplacementOutput import ReplacementOutputDomain, ReplacementOutputExon
 from BusinessLogic.Settings.Settings import settings
 
 class FabricResponse:

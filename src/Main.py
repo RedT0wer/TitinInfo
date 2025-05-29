@@ -11,12 +11,20 @@ class MyApp(QtWidgets.QMainWindow):
         super(MyApp, self).__init__()
         self.app = Application()
         self.ui = uic.loadUi("mainwindow.ui", self)
+        self.ui.view_domains.clicked.connect(self.f1)
+        self.ui.view_exons.clicked.connect(self.f2)
         self.ui.pull_request.clicked.connect(self.PullRequest)
         self.ui.find.clicked.connect(self.choiseFunction)
         self.ui.replacement.clicked.connect(self.choiseFunction)
         self.ui.insert.clicked.connect(self.choiseFunction)
         self.ui.delete_nucleotide.clicked.connect(self.choiseFunction)
         self.ui.delete_exon.clicked.connect(self.choiseFunction)
+
+    def f1(self):
+        pass
+
+    def f2(self):
+        pass
 
     def PullRequest(self):
         try:
