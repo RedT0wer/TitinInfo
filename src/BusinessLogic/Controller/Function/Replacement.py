@@ -1,5 +1,5 @@
-from Controller.Classes.StructExon import StructExon
-from Controller.Classes.StructProtein import StructProtein
+from BusinessLogic.Controller.Classes.StructExon import StructExon
+from BusinessLogic.Controller.Classes.StructProtein import StructProtein
 
 class Replacement:
     def __init__(self):

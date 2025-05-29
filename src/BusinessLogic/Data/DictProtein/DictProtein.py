@@ -1,8 +1,7 @@
 from bisect import bisect_left
-from typing import List
-from Data.DictProtein.Protein import Protein
-from Data.DictProtein.Domain import Domain
-from Data.DictProtein.Connection import Connection
+from BusinessLogic.Data.DictProtein.Protein import Protein
+from BusinessLogic.Data.DictProtein.Domain import Domain
+from BusinessLogic.Data.DictProtein.Connection import Connection
 
 class DictProtein:
     def __init__(self, stream1, stream2):

@@ -1,7 +1,7 @@
 from bisect import bisect_left
 from typing import List
-from Data.DictExons.Exon import Exon
-from Data.DictExons.SequenseN import SequenseN
+from BusinessLogic.Data.DictExons.Exon import Exon
+from BusinessLogic.Data.DictExons.SequenseN import SequenseN
 
 class DictExons:
     def __init__(self, stream1, stream2):

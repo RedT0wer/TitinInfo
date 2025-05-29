@@ -1,71 +1,44 @@
-from Controller.Classes.StructExon import StructExon
-from Controller.Classes.StructProtein import StructProtein
+from BusinessLogic.Controller.Classes.StructExon import StructExon
+from BusinessLogic.Controller.Classes.StructProtein import StructProtein
 
-class Insert:
+
+class DeleteExon():
     def __init__(self):
         self.StructExon = None
         self.StructProtein = None
 
     def __parsingRequest(self, request):
-        numNucleotide = int(request["st"]) - 1
-        seqNewNucleotide = request["newSequense"]
-        return (numNucleotide, seqNewNucleotide)
+        numNucleotide = int(request["number"]) - 1
+        return numNucleotide
 
     def __building(self, Data, request):
-        numNucleotide, seqNewNucleotide = self.__parsingRequest(request)
-        structExon,structProtein = self.buildingStructs(Data, numNucleotide, seqNewNucleotide)
+        numNucleotide = self.__parsingRequest(request)
+        structExon, structProtein = self.buildingStructExon(Data, numNucleotide)
         self.StructExon = structExon
         self.StructProtein = structProtein
 
-    def buildingStructs(self, Data, numNucleotide, seqNewNucleotide):
-        ans = self.checkIntersectionDomain(Data, numNucleotide)
+    def buildingStructExon(self, Data, numNucleotide):
+        exon_changed, numChanged, exon_for_seq = self.checkingStartExon(Data, numNucleotide) #номер в индексах как входной
+        indexExonSt = Data.getIndexExon(numNucleotide)
+        ans = self.checkIntersectionDomain(Data, numChanged)
         arrayStructProtein = []
-        for protein,indexObject in ans:
-            indexExonSt = Data.getIndexExon(numNucleotide)
-            exon = Data.getExon(indexExonSt)
-            indexNucleotideInExon = Data.indexNucleotideInExon(numNucleotide)
 
-            sequense = self.constructSequence(exon, indexNucleotideInExon, seqNewNucleotide)
-            startS, end = self.calculateStartEnd(Data, exon, protein, sequense)
+        for protein, indexObject in ans:
+            startS = self.calculateStart(exon_for_seq, protein, Data)
+            sequense = self.constructSequense(exon_for_seq)
+            end = self.calculateEnd(sequense, startS)
 
             aminoacids, stopCodon = self.translateSequence(Data, sequense, startS, end)
             indexExonEnd, stopCodon, sequense, aminoacids = self.extendTranslation(Data, indexExonSt, sequense, aminoacids, stopCodon, end)
-
-            structExon = StructExon(sequense,"",indexExonSt + 1,indexExonEnd,indexNucleotideInExon + 1,indexNucleotideInExon + len(seqNewNucleotide),stopCodon[0],stopCodon[1])
+            structExon = StructExon(sequense, "", indexExonSt + 1, indexExonEnd,
+                                    -1, -1, stopCodon[0],
+                                    stopCodon[1])
 
             nameObject = Data.DictProtein.getFullName(indexObject)
-            general_sequense = self.findGeneralSequense(Data, exon, startS, protein)
+            general_sequense = self.findGeneralSequense(Data, protein, exon_changed, startS)
             aminoacids = general_sequense + aminoacids
             indexDifference = self.calculIndexDifference(aminoacids, protein.sequense)
-
             arrayStructProtein.append(StructProtein(protein.sequense, aminoacids, nameObject, "", -1, indexDifference))
-
-        return (structExon, arrayStructProtein)
-
-    def buildingStructsOld(self, Data, numNucleotide, seqNewNucleotide):
-        numAminoacid = numNucleotide // 3
-        indexObject = Data.getIndexObject(numAminoacid)
-        protein = Data.getObject(indexObject)
-
-        indexExonSt = Data.getIndexExon(numNucleotide)
-        exon = Data.getExon(indexExonSt)
-        indexNucleotideInExon = Data.indexNucleotideInExon(numNucleotide)
-
-        sequense = self.constructSequence(exon, indexNucleotideInExon, seqNewNucleotide)
-        startS, end = self.calculateStartEnd(Data, exon, protein, sequense)
-
-        aminoacids, stopCodon = self.translateSequence(Data, sequense, startS, end)
-        indexExonEnd, stopCodon, sequense, aminoacids, stopCodon = self.extendTranslation(Data, indexExonSt, sequense, aminoacids, stopCodon, end)
-
-        structExon = StructExon(sequense,"",indexExonSt + 1,indexExonEnd,indexNucleotideInExon + 1,indexNucleotideInExon + len(seqNewNucleotide),stopCodon[0],stopCodon[1])
-
-        nameObject = Data.DictProtein.getFullName(indexObject)
-        general_sequense = self.findGeneralSequense(Data, exon, startS)
-        aminoacids = general_sequense + aminoacids
-        indexDifference = self.calculIndexDifference(aminoacids, protein.sequense)
-
-        arrayStructProtein = []
-        arrayStructProtein.append(StructProtein(protein.sequense, aminoacids, nameObject, "", -1, indexDifference))
 
         return (structExon, arrayStructProtein)
 
@@ -102,13 +75,38 @@ class Insert:
             arrayStructProtein.append((protein, right_indexObject))
         return arrayStructProtein
 
-    def constructSequence(self, exon, indexNucleotideInExon, seqNewNucleotide):
-        return exon.sequense[:indexNucleotideInExon + 1] + seqNewNucleotide + exon.sequense[indexNucleotideInExon + 1:]
+    def checkingStartExon(self, Data, numNucleotide):
+        indexExon = Data.getIndexExon(numNucleotide)
+        if Data.DictExons.isFirstNumber(indexExon):
+            exon_changed = Data.getExon(indexExon)
+            numChanged = exon_changed.startPhase
+            exon_for_seq = None
+        else:
+            exon = Data.getExon(indexExon - 1)
+            if exon.endPhase == 0:
+                exon_changed = Data.getExon(indexExon)
+                numChanged = exon_changed.startPhase
+                exon_for_seq = None
+            else:
+                exon_changed = exon
+                numChanged = len(exon.sequense) - exon.endPhase
+                exon_for_seq = exon
+        return (exon_changed, numChanged + exon_changed.indexSt - Data.DictExons.getUtr5(), exon_for_seq)
 
-    def calculateStartEnd(self, Data, exon, protein, sequense):
-        startS = max(exon.indexSt + exon.startPhase, protein.indexSt * 3 + Data.DictExons.getUtr5()) - exon.indexSt
-        end = len(sequense) - (len(sequense) - startS) % 3 - 3
-        return startS, end
+    def calculateStart(self, exon, protein, Data):
+        if exon is None:
+            return 0
+        else:
+            return max(exon.indexSt + exon.startPhase, protein.indexSt * 3 + Data.DictExons.getUtr5()) - exon.indexSt
+
+    def constructSequense(self, exon):
+        sequense = ""
+        if exon:
+            sequense += exon.sequense
+        return sequense
+
+    def calculateEnd(self, sequense, start):
+        return len(sequense) - (len(sequense) - start) % 3 - 3
 
     def translateSequence(self, Data, sequense, start, end):
         return Data.DictTranslation.transaltionSequense(sequense, start, end)
@@ -123,9 +121,17 @@ class Insert:
             dop_aminoacids, stopCodon = self.translateSequence(Data, sequense, start, end)
             aminoacids += dop_aminoacids
             indexExonEnd += 1
+        if Data.DictExons.isLastNumber(indexExonEnd) and stopCodon == (-1, -1):
+            next_exon = Data.getExon(indexExonEnd)
+            sequense += next_exon.sequense[:len(next_exon.sequense) - next_exon.endPhase]
+            start = end + 3
+            end = len(sequense) - (len(sequense) - start) % 3 - 3
+            dop_aminoacids, stopCodon = self.translateSequence(Data, sequense, start, end)
+            aminoacids += dop_aminoacids
+            indexExonEnd += 1
         return indexExonEnd, stopCodon, sequense, aminoacids
 
-    def findGeneralSequense(self, Data, exon, start, domain):
+    def findGeneralSequense(self, Data, domain, exon, start):
         numNucleotide = Data.DictExons.globalNucleotideFromExon(exon, start)
         numAminoacid = numNucleotide // 3
         start = 0
@@ -133,8 +139,8 @@ class Insert:
         return domain.sequense[start:end]
 
     def calculIndexDifference(self, aminoacids, origin):
-        for num,tup in enumerate(zip(origin, aminoacids)):
-            i,j = tup
+        for num, tup in enumerate(zip(origin, aminoacids)):
+            i, j = tup
             if i != j:
                 return num
         return len(origin)
@@ -142,10 +148,11 @@ class Insert:
     def buildingResponse(self, Data, request):
         self.__building(Data, request)
         response = {
-            "function": "insert",
-            "Exon" : self.StructExon,
-            "Protein" : self.StructProtein,
+            "function": "delete_exon",
+            "Exon": self.StructExon,
+            "Protein": self.StructProtein,
         }
         return response
 
-insert = Insert()
+
+deleteExon = DeleteExon()

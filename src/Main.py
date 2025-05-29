@@ -2,9 +2,9 @@ import sys
 import time
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QRadioButton, QWidget
-from Application import Application
+from BusinessLogic.Application import Application
 from FabricResponse import FabricResponse
-from Settings.Settings import settings
+from BusinessLogic.Settings.Settings import settings
 
 class MyApp(QtWidgets.QMainWindow):
     def __init__(self):

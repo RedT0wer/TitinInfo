@@ -1,5 +1,5 @@
-from Controller.Classes.StructProtein import StructProtein
-from Controller.Classes.StructExon import StructExon
+from BusinessLogic.Controller.Classes.StructProtein import StructProtein
+from BusinessLogic.Controller.Classes.StructExon import StructExon
 
 class Find():
     def __init__(self):

@@ -1,6 +1,3 @@
-from Controller.Classes.StructProtein import StructProtein
-from Controller.Classes.StructExon import StructExon
-
 class DeleteExonOutputDomain:
     def __init__(self, StructProtein):
         self.name = StructProtein.nameObject
