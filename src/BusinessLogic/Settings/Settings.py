@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     delete_nucleotide: str
     delete_exon: str
     model_config = SettingsConfigDict(
-        env_file="Settings/.env"
+        env_file="BusinessLogic/Settings/.env"
     )
 
 settings = Settings()

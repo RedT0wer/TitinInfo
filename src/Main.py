@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import QRadioButton, QWidget
 from BusinessLogic.Application import Application
 from FabricResponse import FabricResponse
 from BusinessLogic.Settings.Settings import settings
+from WebPages.ViewData.ExonsOutput import ExonsOutput
+
 
 class MyApp(QtWidgets.QMainWindow):
     def __init__(self):
@@ -24,7 +26,8 @@ class MyApp(QtWidgets.QMainWindow):
         pass
 
     def f2(self):
-        pass
+        html = ExonsOutput(self.app.Data.DictExons)
+        self.app_finished(str(html), False)
 
     def PullRequest(self):
         try:

@@ -1,14 +1,14 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 
-from Api.ManagerApi import ManagerApi
-from Controller.Controller import Controller
-from Controller.Function.DeleteExon import deleteExon
-from Controller.Function.Find import find
-from Controller.Function.Replacement import replacement
-from Controller.Function.Insert import insert
-from Controller.Function.DeleteNucleotide import deleteNucleotide
-from Data.Data import Data
-from Settings.Settings import settings
+from BusinessLogic.Api.ManagerApi import ManagerApi
+from BusinessLogic.Controller.Controller import Controller
+from BusinessLogic.Controller.Function.DeleteExon import deleteExon
+from BusinessLogic.Controller.Function.Find import find
+from BusinessLogic.Controller.Function.Replacement import replacement
+from BusinessLogic.Controller.Function.Insert import insert
+from BusinessLogic.Controller.Function.DeleteNucleotide import deleteNucleotide
+from BusinessLogic.Data.Data import Data
+from BusinessLogic.Settings.Settings import settings
 import asyncio
 
 class Application():

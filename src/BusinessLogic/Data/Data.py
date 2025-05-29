@@ -1,10 +1,13 @@
 from BusinessLogic.Api.WebSite.NBCIExons import nbciExons
 from BusinessLogic.Api.WebSite.NBCISequense import nbciSequense
-from BusinessLogic.Data.Data import DictProtein
-from BusinessLogic.Data.Data import Exon
+from BusinessLogic.Data.DictProtein.DictProtein import DictProtein
+from BusinessLogic.Data.DictExons.Exon import Exon
 from BusinessLogic.Data.DictExons.DictExons import DictExons
-from BusinessLogic.Data.Data import DictTranslation
-from BusinessLogic.Api.ManagerApi import ensemblExons, ensemblSequense, uniProtDomains, uniProtSequense
+from BusinessLogic.Data.DictTranslation.DictTranslation import DictTranslation
+from BusinessLogic.Api.WebSite.EnsemblExons import ensemblExons
+from BusinessLogic.Api.WebSite.EnsemblSequense import ensemblSequense
+from BusinessLogic.Api.WebSite.UniProtSequense import uniProtSequense
+from BusinessLogic.Api.WebSite.UniProtDomains import uniProtDomains
 
 
 class Data:
