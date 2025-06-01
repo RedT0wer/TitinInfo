@@ -1,3 +1,3 @@
 class ManagerApi():
-    async def getData(self, identifier: str, webSite):
-        return await webSite.getData(identifier)
+    def getData(self, identifier: str, webSite):
+        return webSite.getData(identifier)

@@ -9,7 +9,6 @@ from BusinessLogic.Controller.Function.Insert import insert
 from BusinessLogic.Controller.Function.DeleteNucleotide import deleteNucleotide
 from BusinessLogic.Data.Data import Data
 from BusinessLogic.Settings.Settings import settings
-import asyncio
 
 class Application:
     def __init__(self):
@@ -32,7 +31,7 @@ class Application:
     def __buildingData(self, request):
         protein, nucleotides = self.__parsingRequest(request)
         if not self.Data.isValid(protein, nucleotides):
-            asyncio.run(self.Data.buildingData(self.ManagerApi, protein, nucleotides))
+            self.Data.buildingData(self.ManagerApi, protein, nucleotides)
 
     def getData(self, request):
         self.__buildingData(request)

@@ -1,17 +1,15 @@
-import aiohttp
-import ssl
+from requests import get
 
-class EnsemblExons():
+
+class EnsemblExons:
     def __init__(self):
         self.url = "https://rest.ensembl.org/lookup/id/"
         self.params = ["expand=1", "content-type=application/json"]
 
-    async def readURL(self, identifier: str):
-        async with aiohttp.ClientSession() as session:
-            ssl_context = ssl._create_unverified_context()
-            async with session.get(f"{self.url}{identifier}?{';'.join(self.params)}", ssl=ssl_context) as response:
-                arr = (await response.json())["Exon"]
-                return self.processing(arr)
+    def readURL(self, identifier: str):
+        response = get(f"{self.url}{identifier}?{';'.join(self.params)}")
+        arr = response.json()["Exon"]
+        return self.processing(arr)
 
     def processing(self, response):
         arr = []
@@ -23,7 +21,7 @@ class EnsemblExons():
             arr.append((st, end))
         return arr
 
-    async def getData(self, identifier: str):
-        return await self.readURL(identifier)
+    def getData(self, identifier: str):
+        return self.readURL(identifier)
 
 ensemblExons = EnsemblExons()

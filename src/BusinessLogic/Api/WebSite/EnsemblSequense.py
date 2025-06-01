@@ -1,23 +1,20 @@
 from typing import Dict
-import aiohttp
-import ssl
+from requests import get
 
-class EnsemblSequense():
+
+class EnsemblSequense:
     def __init__(self):
         self.url = "https://rest.ensembl.org/sequence/id/"
         self.params = ["mask_feature=1", "type=cdna", "content-type=application/json"]
 
-    async def readURL(self, identifier: str):
-        self.identifier = identifier
-        async with aiohttp.ClientSession() as session:
-            ssl_context = ssl._create_unverified_context()
-            async with session.get(f"{self.url}{identifier}?{';'.join(self.params)}", ssl=ssl_context) as response:
-                return await self.processing(response.json())
+    def readURL(self, identifier: str):
+        response = get(f"{self.url}{identifier}?{';'.join(self.params)}")
+        return self.processing(response.json())
 
-    async def processing(self, response: Dict):
-        return ((await response)["seq"], -1, -1)
+    def processing(self, response: Dict):
+        return (response["seq"], -1, -1)
 
-    async def getData(self, identifier: str):
-        return await self.readURL(identifier)
+    def getData(self, identifier: str):
+        return self.readURL(identifier)
 
 ensemblSequense = EnsemblSequense()

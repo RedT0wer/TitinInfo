@@ -4,6 +4,6 @@ class Connection:
         self.indexSt = indexSt
         self.indexEnd = indexEnd
     def __repr__(self):
-        return f"{self.sequense}, Connection, {self.indexSt}, {self.indexEnd}"
+        return f"{self.sequense}, Name=Connection, St={self.indexSt}, End={self.indexEnd}"
     def __eq__(self, other):
         return type(self).__name__ == type(other).__name__ and self.sequense == other.sequense and self.indexSt == other.indexSt and self.indexEnd == other.indexEnd
