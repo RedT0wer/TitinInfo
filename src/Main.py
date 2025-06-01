@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QRadioButton, QWidget
 from BusinessLogic.Application import Application
 from FabricResponse import FabricResponse
 from BusinessLogic.Settings.Settings import settings
+from WebPages.ViewData.DomainsOutput import DomainsOutput
 from WebPages.ViewData.ExonsOutput import ExonsOutput
 
 
@@ -23,24 +24,21 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.delete_exon.clicked.connect(self.choiseFunction)
 
     def f1(self):
-        pass
+        html = DomainsOutput(self.app.Data.DictProtein)
+        self.app_finished(str(html), False)
 
     def f2(self):
         html = ExonsOutput(self.app.Data.DictExons)
         self.app_finished(str(html), False)
 
+    def f3(self, response):
+        html = FabricResponse.getResponse(response)
+        self.app_finished(html, False)
+
     def PullRequest(self):
-        try:
-            st = time.time()
-            request = self.getRequest()
-            response = self.app.getData(request)
-            html = FabricResponse.getResponse(response)
-            self.app_finished(html, False)
-        except Exception as e:
-            self.app_finished("", True)
-            print(e)
-        finally:
-            print(time.time() - st)
+        request = self.getRequest()
+        response = self.app.getData(request)
+        self.f3(response)
 
     def app_finished(self, html, status):
         self.ui.response_browser.setHtml(html)

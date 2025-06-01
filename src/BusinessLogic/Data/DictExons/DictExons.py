@@ -34,7 +34,7 @@ class DictExons:
             elif st > utr3:
                 exon = Exon(st, end, 0, 0, seq[st:end + 1])
             else:
-                prev = self.exons[-1].endPhase
+                prev = self.exons[-1].endPhase if self.exons else 0
                 exon = Exon(st, end, (3 - prev)%3, ((end - st + 1) - (3 - prev)%3) % 3, seq[st:end + 1])
             
             self.exons.append(exon)

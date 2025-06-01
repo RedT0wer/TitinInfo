@@ -14,7 +14,7 @@ class SequenseN:
         return self.sequense[index]
 
     def createUtr5(self, sequense: str) -> str:
-        utr5 = 0
+        utr5 = -1
         for i in range(len(sequense)):
             if sequense[i].islower():
                 utr5 = i

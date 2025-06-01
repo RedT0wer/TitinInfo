@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal, QObject
 
 from BusinessLogic.Api.ManagerApi import ManagerApi
 from BusinessLogic.Controller.Controller import Controller
@@ -11,7 +11,7 @@ from BusinessLogic.Data.Data import Data
 from BusinessLogic.Settings.Settings import settings
 import asyncio
 
-class Application():
+class Application:
     def __init__(self):
         self.ManagerApi = ManagerApi()
         self.Data = Data()
@@ -35,8 +35,9 @@ class Application():
             asyncio.run(self.Data.buildingData(self.ManagerApi, protein, nucleotides))
 
     def getData(self, request):
-        nameFunction = request["function"]
         self.__buildingData(request)
+
+        nameFunction = request["function"]
         function = self.FunctionObject[nameFunction]
         self.Controller.setFunction(function)
         return self.Controller.getResponse(self.Data, request)
