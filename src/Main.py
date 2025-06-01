@@ -37,8 +37,8 @@ class MyApp(QtWidgets.QMainWindow):
 
     def PullRequest(self):
         request = self.getRequest()
-        response = self.app.getData(request)
-        self.f3(response)
+        self.app.finished.connect(self.f3)
+        self.app.start_request(request)
 
     def app_finished(self, html, status):
         self.ui.response_browser.setHtml(html)

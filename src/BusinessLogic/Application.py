@@ -10,11 +10,15 @@ from BusinessLogic.Controller.Function.DeleteNucleotide import deleteNucleotide
 from BusinessLogic.Data.Data import Data
 from BusinessLogic.Settings.Settings import settings
 
-class Application:
+class Application(QThread):
+    finished = pyqtSignal(dict)
+
     def __init__(self):
+        super(Application, self).__init__()
         self.ManagerApi = ManagerApi()
         self.Data = Data()
         self.Controller = Controller()
+        self.request = None
         self.FunctionObject = {
             settings.find: find,
             settings.insert: insert,
@@ -33,10 +37,15 @@ class Application:
         if not self.Data.isValid(protein, nucleotides):
             self.Data.buildingData(self.ManagerApi, protein, nucleotides)
 
-    def getData(self, request):
-        self.__buildingData(request)
+    def run(self):
+        self.__buildingData(self.request)
 
-        nameFunction = request["function"]
+        nameFunction = self.request["function"]
         function = self.FunctionObject[nameFunction]
         self.Controller.setFunction(function)
-        return self.Controller.getResponse(self.Data, request)
+        response = self.Controller.getResponse(self.Data, self.request)
+        self.finished.emit(response)
+
+    def start_request(self, request):
+        self.request = request
+        self.start()
