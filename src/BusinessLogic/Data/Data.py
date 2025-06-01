@@ -18,8 +18,21 @@ class Data:
         self.__nucleotides = ""
         self.__protein = ""
 
-    def isValid(self, protein, nucleotides):
-        return protein == self.__protein and nucleotides == self.__nucleotides
+    def isValidProtein(self, protein):
+        return protein == self.__protein
+
+    def isValidNucleotide(self, nucleotides):
+        return nucleotides == self.__nucleotides
+
+    def buildingDataNucleotide(self, managerApi, nucleotides):
+        self.__nucleotides = nucleotides
+        self.DictExons = self.__buildingDictExons(managerApi, nucleotides)
+
+    def buildingDataProtein(self, managerApi, protein):
+        self.__protein = protein
+        self.DictProtein = self.__buildingDictProtein(managerApi, protein)
+        self.DictProtein.buildingProtein(self.DictExons, self.DictTranslation)
+        self.DictProtein.buildingListObject()
 
     def buildingData(self, managerApi, protein, nucleotides):
         self.__nucleotides = nucleotides

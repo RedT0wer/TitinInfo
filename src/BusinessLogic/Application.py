@@ -34,8 +34,10 @@ class Application(QThread):
 
     def __buildingData(self, request):
         protein, nucleotides = self.__parsingRequest(request)
-        if not self.Data.isValid(protein, nucleotides):
-            self.Data.buildingData(self.ManagerApi, protein, nucleotides)
+        if not self.Data.isValidNucleotide(nucleotides):
+            self.Data.buildingDataNucleotide(self.ManagerApi, nucleotides)
+        if not self.Data.isValidProtein(protein):
+            self.Data.buildingDataProtein(self.ManagerApi, protein)
 
     def run(self):
         self.__buildingData(self.request)

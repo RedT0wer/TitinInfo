@@ -14,8 +14,8 @@ class MyApp(QtWidgets.QMainWindow):
         super(MyApp, self).__init__()
         self.app = Application()
         self.ui = uic.loadUi("mainwindow.ui", self)
-        self.ui.view_domains.clicked.connect(self.f1)
-        self.ui.view_exons.clicked.connect(self.f2)
+        self.ui.view_domains.clicked.connect(self.viewAllDomains)
+        self.ui.view_exons.clicked.connect(self.viewAllExons)
         self.ui.pull_request.clicked.connect(self.PullRequest)
         self.ui.find.clicked.connect(self.choiseFunction)
         self.ui.replacement.clicked.connect(self.choiseFunction)
@@ -23,11 +23,11 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.delete_nucleotide.clicked.connect(self.choiseFunction)
         self.ui.delete_exon.clicked.connect(self.choiseFunction)
 
-    def f1(self):
+    def viewAllDomains(self):
         html = DomainsOutput(self.app.Data.DictProtein)
         self.app_finished(str(html), False)
 
-    def f2(self):
+    def viewAllExons(self):
         html = ExonsOutput(self.app.Data.DictExons)
         self.app_finished(str(html), False)
 
@@ -39,10 +39,16 @@ class MyApp(QtWidgets.QMainWindow):
         request = self.getRequest()
         self.app.finished.connect(self.f3)
         self.app.start_request(request)
+        self.block_button()
+
+    def block_button(self):
+        self.ui.pull_request.setEnabled(False)
+        self.ui.response_browser.setHtml("Идет чтение данных...")
 
     def app_finished(self, html, status):
         self.ui.response_browser.setHtml(html)
         self.ui.checkException.setChecked(status)
+        self.ui.pull_request.setEnabled(True)
 
     def getRequest(self):
         button = self.getActiveButton()
