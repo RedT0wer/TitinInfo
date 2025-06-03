@@ -22,6 +22,14 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.insert.clicked.connect(self.choiseFunction)
         self.ui.delete_nucleotide.clicked.connect(self.choiseFunction)
         self.ui.delete_exon.clicked.connect(self.choiseFunction)
+        self.ui.insert_st.textChanged.connect(self.f1)
+
+    def f1(self):
+        integer = self.ui.insert_st.toPlainText()
+        if integer.isdigit():
+            self.ui.insert_end.setPlainText(str(int(integer) + 1))
+        else:
+            self.ui.insert_end.setPlainText('-')
 
     def viewAllDomains(self):
         html = DomainsOutput(self.app.Data.DictProtein)
@@ -122,6 +130,8 @@ class MyApp(QtWidgets.QMainWindow):
         for element in self.ui.params_request.findChildren(QWidget):
             if (element.inherits("QLabel") or element.inherits("QTextEdit")) and button.objectName() in element.objectName():
                 element.setEnabled(True)
+            if element.objectName() == 'insert_end':
+                element.setEnabled(False)
 
     def getActiveButton(self):
         for button in self.ui.choise_function.findChildren(QRadioButton):
