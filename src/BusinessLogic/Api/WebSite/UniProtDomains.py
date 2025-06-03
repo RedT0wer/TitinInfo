@@ -1,13 +1,18 @@
 from requests import get
+from BusinessLogic.Settings.UrlsEnv import urlsEnv
 
 class UniProtDomains:
     def __init__(self):
         self.url = "https://rest.uniprot.org/uniprotkb/"
 
     def readURL(self, identifier: str):
-        response = get(f"{self.url}{identifier}.json?fields=ft_domain%2Cft_region%2Cft_repeat%2Cft_coiled%2Cft_compbias")
+        response = get(f"{self.url}{identifier}.json?{self.getFields(identifier)}")
         arr = response.json()["features"]
         return self.processing(arr)
+
+    def getFields(self, identifier):
+        dictionary = urlsEnv.model_dump()
+        return f"fields={dictionary[identifier.lower()]}" if identifier.lower() in dictionary else ''
 
     def processing(self, response):
         arr = []
