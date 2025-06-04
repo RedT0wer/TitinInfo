@@ -1,7 +1,7 @@
 import sys
 import time
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QRadioButton, QWidget
+from PyQt5.QtWidgets import QRadioButton, QWidget, QTableWidgetItem, QMessageBox
 from BusinessLogic.Application import Application
 from FabricResponse import FabricResponse
 from BusinessLogic.Settings.Settings import settings
@@ -22,9 +22,35 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.insert.clicked.connect(self.choiseFunction)
         self.ui.delete_nucleotide.clicked.connect(self.choiseFunction)
         self.ui.delete_exon.clicked.connect(self.choiseFunction)
-        self.ui.insert_st.textChanged.connect(self.f1)
+        self.ui.insert_st.textChanged.connect(self.dinamicChangeNumber)
+        
+        self.ui.add_url.clicked.connect(self.addRowToTable)
+        self.ui.remove_url.clicked.connect(self.removeSelectedRows)
 
-    def f1(self):
+    def addRowToTable(self):
+        table_widget = self.ui.table_urls
+        index = table_widget.rowCount() + 1
+        row_data = [f'id{index}', f'url{index}']
+
+        row_position = table_widget.rowCount()
+        table_widget.insertRow(row_position)
+
+        for column, data in enumerate(row_data):
+            table_widget.setItem(row_position, column, QTableWidgetItem(data))
+
+    def removeSelectedRows(self):
+        table_widget = self.ui.table_urls
+
+        selected_rows = table_widget.selectionModel().selectedRows()
+
+        if not selected_rows:
+            QMessageBox.warning(table_widget, "Предупреждение", "Нет выделенных строк для удаления.")
+            return
+
+        for row in sorted(selected_rows, reverse=True):
+            table_widget.removeRow(row.row())
+
+    def dinamicChangeNumber(self):
         integer = self.ui.insert_st.toPlainText()
         if integer.isdigit():
             self.ui.insert_end.setPlainText(str(int(integer) + 1))
