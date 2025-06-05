@@ -16,18 +16,35 @@ class MyApp(QtWidgets.QMainWindow):
         self.app = Application()
         self.ui = uic.loadUi("mainwindow.ui", self)
         self.__initializationSettings()
+
+        self.ui.table_urls.cellChanged.connect(self.handleCellChanged)
+
         self.ui.view_domains.clicked.connect(self.viewAllDomains)
         self.ui.view_exons.clicked.connect(self.viewAllExons)
+
         self.ui.pull_request.clicked.connect(self.PullRequest)
+
         self.ui.find.clicked.connect(self.choiseFunction)
         self.ui.replacement.clicked.connect(self.choiseFunction)
         self.ui.insert.clicked.connect(self.choiseFunction)
         self.ui.delete_nucleotide.clicked.connect(self.choiseFunction)
         self.ui.delete_exon.clicked.connect(self.choiseFunction)
+
         self.ui.insert_st.textChanged.connect(self.dinamicChangeNumber)
         
         self.ui.add_url.clicked.connect(self.addRowToTable)
         self.ui.remove_url.clicked.connect(self.removeSelectedRows)
+
+    def handleCellChanged(self, row, column):
+        table_widget = self.ui.table_urls
+        item = table_widget.item(row, column)
+        if column == 1:
+            id = table_widget.item(row, 0).text()
+            url = item.text()
+        else:
+            id = item.text()
+            url = table_widget.item(row, 1).text()
+        UrlsEnv.add_variable_to_env_file(id, url)
 
     def __initializationSettings(self):
         urlsEnv = UrlsEnv()
