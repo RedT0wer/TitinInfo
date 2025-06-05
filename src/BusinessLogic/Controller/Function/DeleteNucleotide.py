@@ -34,7 +34,7 @@ class DeleteNucleotide():
 
             end = self.calculateEnd(sequense, startS)
             aminoacids, stopCodon = Data.DictTranslation.transaltionSequense(sequense, startS, end)
-            indexExonEnd, stopCodon = self.extendTranslation(Data, indexExonSt, sequense, aminoacids, stopCodon, end)
+            indexExonEnd, stopCodon, sequense, aminoacids = self.extendTranslation(Data, indexExonSt, sequense, aminoacids, stopCodon, end)
             structExon = StructExon(sequense[len(prev):], oldAminoaicd, indexExonSt + 1, indexExonEnd,
                                     indexNucleotideInExon, indexNucleotideInExon2, stopCodon[0] - len(prev),
                                     stopCodon[1] - len(prev))
@@ -158,7 +158,7 @@ class DeleteNucleotide():
             dop_aminoacids, stopCodon = self.translateSequence(Data, sequense, start, end)
             aminoacids += dop_aminoacids
             indexExonEnd += 1
-        return indexExonEnd, stopCodon
+        return indexExonEnd, stopCodon, sequense, aminoacids
 
     def findGeneralSequense(self, Data, exon, start, domain):
         numNucleotide = Data.DictExons.globalNucleotideFromExon(exon, start)

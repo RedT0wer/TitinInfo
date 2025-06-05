@@ -38,13 +38,14 @@ class MyApp(QtWidgets.QMainWindow):
     def handleCellChanged(self, row, column):
         table_widget = self.ui.table_urls
         item = table_widget.item(row, column)
-        if column == 1:
-            id = table_widget.item(row, 0).text()
-            url = item.text()
-        else:
-            id = item.text()
-            url = table_widget.item(row, 1).text()
-        UrlsEnv.add_variable_to_env_file(id, url)
+        if table_widget.rowCount() != row + 1:
+            if column == 1:
+                id = table_widget.item(row, 0).text()
+                url = item.text()
+            else:
+                id = item.text()
+                url = table_widget.item(row, 1).text()
+            UrlsEnv.add_variable_to_env_file(id, url)
 
     def __initializationSettings(self):
         urlsEnv = UrlsEnv()

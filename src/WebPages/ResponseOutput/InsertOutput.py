@@ -21,6 +21,7 @@ class InsertOutputExon:
     def __init__(self, StructExon):
         self.st = StructExon.numberExon[0]
         self.end = StructExon.numberExon[1]
+        self.old = StructExon.nucleotide
         self.sequense = StructExon.sequense
         self.stopCodon = StructExon.stopCodon
         self.index = StructExon.indexNucleotide
@@ -30,8 +31,8 @@ class InsertOutputExon:
         f"<span>Закончили в Экзоне {self.end}</span>" + \
         "<br>" + \
         f"<span style='color: black;'>{self.sequense[:self.index[0]]}</span>" +\
-        f"<span style='color: red;'>{self.sequense[self.index[0]]}</span>" +\
-        f"<span style='color: black;'>{self.sequense[self.index[1] + 1:self.stopCodon[0]]}</span>" +\
+        f"<span style='color: red;'>{self.old}</span>" +\
+        f"<span style='color: black;'>{self.sequense[self.index[0]:self.stopCodon[0]]}</span>" +\
         f"<span style='color: orange;'>{self.sequense[self.stopCodon[0]:self.stopCodon[1] + 1]}</span>" +\
         f"<span style='color: black;'>{self.sequense[self.stopCodon[1] + 1:]}</span>"
     def __add__(self, other):
