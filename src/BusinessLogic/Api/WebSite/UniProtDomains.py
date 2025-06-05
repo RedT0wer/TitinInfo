@@ -1,5 +1,5 @@
 from requests import get
-from BusinessLogic.Settings.UrlsEnv import urlsEnv
+from BusinessLogic.Settings.UrlsEnv import UrlsEnv
 
 class UniProtDomains:
     def __init__(self):
@@ -11,6 +11,7 @@ class UniProtDomains:
         return self.processing(arr)
 
     def getFields(self, identifier):
+        urlsEnv = UrlsEnv()
         dictionary = urlsEnv.model_dump()
         return f"fields={dictionary[identifier.lower()]}" if identifier.lower() in dictionary else ''
 

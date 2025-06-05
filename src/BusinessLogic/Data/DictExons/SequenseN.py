@@ -13,6 +13,9 @@ class SequenseN:
     def __getitem__(self, index):
         return self.sequense[index]
 
+    def __len__(self):
+        return len(self.sequense)
+
     def createUtr5(self, sequense: str) -> str:
         utr5 = -1
         for i in range(len(sequense)):

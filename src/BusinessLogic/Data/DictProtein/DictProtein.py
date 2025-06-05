@@ -41,7 +41,7 @@ class DictProtein:
                 if arr == [] and index != 0:
                     conn = Connection(self.protein[0:index], 0, index - 1)
                     arr.append(conn)
-                elif arr[-1].indexEnd + 1 < index:
+                elif arr and arr[-1].indexEnd + 1 < index:
                     prev = arr[-1]
                     conn = Connection(self.protein[prev.indexEnd + 1:index], prev.indexEnd + 1, index - 1)
                     arr.append(conn)

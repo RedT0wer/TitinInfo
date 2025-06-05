@@ -46,6 +46,7 @@ class Application(QThread):
         function = self.FunctionObject[nameFunction]
         self.Controller.setFunction(function)
         response = self.Controller.getResponse(self.Data, self.request)
+
         self.finished.emit(response)
 
     def start_request(self, request):

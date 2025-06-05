@@ -3,6 +3,7 @@ import time
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QRadioButton, QWidget, QTableWidgetItem, QMessageBox
 from BusinessLogic.Application import Application
+from BusinessLogic.Settings.UrlsEnv import UrlsEnv
 from FabricResponse import FabricResponse
 from BusinessLogic.Settings.Settings import settings
 from WebPages.ViewData.DomainsOutput import DomainsOutput
@@ -14,6 +15,7 @@ class MyApp(QtWidgets.QMainWindow):
         super(MyApp, self).__init__()
         self.app = Application()
         self.ui = uic.loadUi("mainwindow.ui", self)
+        self.__initializationSettings()
         self.ui.view_domains.clicked.connect(self.viewAllDomains)
         self.ui.view_exons.clicked.connect(self.viewAllExons)
         self.ui.pull_request.clicked.connect(self.PullRequest)
@@ -27,6 +29,20 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.add_url.clicked.connect(self.addRowToTable)
         self.ui.remove_url.clicked.connect(self.removeSelectedRows)
 
+    def __initializationSettings(self):
+        urlsEnv = UrlsEnv()
+        dictionary = urlsEnv.model_dump()
+        rows_data = [(key, dictionary[key]) for key in dictionary]
+
+        row_position = -1
+        table_widget = self.ui.table_urls
+        table_widget.insertRow(row_position)
+        for key,value in rows_data:
+            row_position += 1
+            table_widget.insertRow(row_position)
+            table_widget.setItem(row_position, 0, QTableWidgetItem(key))
+            table_widget.setItem(row_position, 1, QTableWidgetItem(value))
+
     def addRowToTable(self):
         table_widget = self.ui.table_urls
         index = table_widget.rowCount() + 1
@@ -34,6 +50,8 @@ class MyApp(QtWidgets.QMainWindow):
 
         row_position = table_widget.rowCount()
         table_widget.insertRow(row_position)
+
+        UrlsEnv.add_variable_to_env_file(*row_data)
 
         for column, data in enumerate(row_data):
             table_widget.setItem(row_position, column, QTableWidgetItem(data))
@@ -47,8 +65,28 @@ class MyApp(QtWidgets.QMainWindow):
             QMessageBox.warning(table_widget, "Предупреждение", "Нет выделенных строк для удаления.")
             return
 
+        selected_values = self.value_selected_rows(table_widget, selected_rows)
+        for column, data in selected_values:
+            UrlsEnv.remove_variable_from_env_file(column)
+
         for row in sorted(selected_rows, reverse=True):
             table_widget.removeRow(row.row())
+
+    def value_selected_rows(self, table_widget, selected_rows):
+        selected_values = []
+
+        for row in selected_rows:
+            row_values = []
+            row_index = row.row()
+            for column in range(table_widget.columnCount()):
+                item = table_widget.item(row_index, column)
+                if item is not None:
+                    row_values.append(item.text())
+                else:
+                    row_values.append(None)
+            selected_values.append(row_values)
+
+        return selected_values
 
     def dinamicChangeNumber(self):
         integer = self.ui.insert_st.toPlainText()
