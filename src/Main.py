@@ -1,7 +1,7 @@
 import sys
 import time
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QRadioButton, QWidget, QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QRadioButton, QWidget, QTableWidgetItem, QMessageBox, QFileDialog
 from BusinessLogic.Application import Application
 from BusinessLogic.Settings.UrlsEnv import UrlsEnv
 from FabricResponse import FabricResponse
@@ -16,6 +16,8 @@ class MyApp(QtWidgets.QMainWindow):
         self.app = Application()
         self.ui = uic.loadUi("mainwindow.ui", self)
         self.__initializationSettings()
+        self.ui.path_origin.clicked.connect(self.open_file_dialog)
+        self.ui.path_isoform.clicked.connect(self.open_file_dialog)
 
         self.app.finished.connect(self.f3)
         self.app.collect.connect(self.f4)
@@ -41,6 +43,15 @@ class MyApp(QtWidgets.QMainWindow):
 
         self.ui.add_url.clicked.connect(self.addRowToTable)
         self.ui.remove_url.clicked.connect(self.removeSelectedRows)
+
+    def open_file_dialog(self):
+        button = self.sender()
+        options = QFileDialog.Options()
+        file_name, _ = QFileDialog.getOpenFileName(self, "Выберите TXT файл", "", "Text Files (*.txt)", options=options)
+        if button.objectName() == "path_origin":
+            self.ui.origin.setText(file_name)
+        else:
+            self.ui.isoform.setText(file_name)
 
     def handleCellChanged(self, row, column):
         table_widget = self.ui.table_urls
@@ -136,8 +147,8 @@ class MyApp(QtWidgets.QMainWindow):
 
     def PullRequest(self):
         request = self.getRequest()
-        operation = 'pull_request'
-        self.app.start_request(request, operation)
+        request['operation'] = 'pull_request'
+        self.app.start_request(request)
         self.ui.response_browser.setHtml("Идет обработка запроса...")
         self.block_button(False)
 
@@ -148,8 +159,8 @@ class MyApp(QtWidgets.QMainWindow):
 
     def CollectData(self):
         request = self.getRequest()
-        operation = 'collect_data'
-        self.app.start_request(request, operation)
+        request['operation'] = 'collect_data'
+        self.app.start_request(request)
         self.ui.response_browser.setHtml("Идет чтение данных...")
 
     def f5(self, error):

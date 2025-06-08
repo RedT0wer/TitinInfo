@@ -1,4 +1,5 @@
-from PyQt5.QtCore import QThread, pyqtSignal, QObject
+import os.path
+from PyQt5.QtCore import QThread, pyqtSignal
 
 from BusinessLogic.Api.ManagerApi import ManagerApi
 from BusinessLogic.Controller.Controller import Controller
@@ -33,14 +34,22 @@ class Application(QThread):
     def __parsingRequest(self, request):
         protein = request["origin"]
         nucleotides = request["isoform"]
-        return (protein, nucleotides)
+        type_collect_prot = os.path.isfile(protein)
+        type_collect_nuc = os.path.isfile(nucleotides)
+        return (protein, nucleotides, type_collect_prot, type_collect_nuc)
 
     def __buildingData(self, request):
-        protein, nucleotides = self.__parsingRequest(request)
+        protein, nucleotides, type_collect_prot, type_collect_nuc = self.__parsingRequest(request)
         if not self.Data.isValidNucleotide(nucleotides):
-            self.Data.buildingDataNucleotide(self.ManagerApi, nucleotides)
+            if type_collect_nuc:
+                self.Data.buildingDataNucleotidePath(nucleotides)
+            else:
+                self.Data.buildingDataNucleotide(self.ManagerApi, nucleotides)
         if not self.Data.isValidProtein(protein):
-            self.Data.buildingDataProtein(self.ManagerApi, protein)
+            if type_collect_prot:
+                self.Data.buildingDataProteinPath(protein)
+            else:
+                self.Data.buildingDataProtein(self.ManagerApi, protein)
 
     def run(self):
         if self.operation == 'collect_data':
@@ -59,7 +68,7 @@ class Application(QThread):
             except Exception as e:
                 self.error.emit(str(e))
 
-    def start_request(self, request, operation):
+    def start_request(self, request):
         self.request = request
-        self.operation = operation
+        self.operation = request['operation']
         self.start()

@@ -34,6 +34,35 @@ class Data:
         self.DictProtein.buildingProtein(self.DictExons, self.DictTranslation)
         self.DictProtein.buildingListObject()
 
+    def buildingDataNucleotidePath(self, path):
+        nucleotides = path.split('/')[-1]
+        self.__nucleotides = nucleotides
+        self.DictExons = self.__buildingDictExonsPath(path)
+
+    def buildingDataProteinPath(self, path):
+        protein = path.split('/')[-1]
+        self.__protein = protein
+        self.DictProtein = self.__buildingDictProteinPath(path)
+        self.DictProtein.buildingProtein(self.DictExons, self.DictTranslation)
+        self.DictProtein.buildingListObject()
+
+    def __buildingDictExonsPath(self, path):
+        with open(path, "r") as f:
+            stream1 = (f.readline().strip(),-1,-1)
+            stream2 = [tuple(map(int, obj.split())) for obj in f.readlines()]
+        return DictExons(stream1, stream2)
+
+    def __buildingDictProteinPath(self, path):
+        with open(path, "r") as f:
+            stream1 = f.readline().strip()
+            stream2 = []
+            for line in f.readlines():
+                arr = line.split()
+                st,end = map(int, arr[:2])
+                name = " ".join(arr[2:])
+                stream2.append((st,end,name))
+        return DictProtein(stream1, stream2)
+
     def __buildingDictExons(self, managerApi, nucleotides):
         stream1 = managerApi.getData(nucleotides, ensemblSequense if nucleotides.startswith('ENST') else nbciSequense)
         stream2 = managerApi.getData(nucleotides, ensemblExons if nucleotides.startswith('ENST') else nbciExons)
