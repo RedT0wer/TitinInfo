@@ -12,6 +12,8 @@ from BusinessLogic.Settings.Settings import settings
 
 class Application(QThread):
     finished = pyqtSignal(dict)
+    collect = pyqtSignal(str)
+    error = pyqtSignal(str)
 
     def __init__(self):
         super(Application, self).__init__()
@@ -19,6 +21,7 @@ class Application(QThread):
         self.Data = Data()
         self.Controller = Controller()
         self.request = None
+        self.operation = None
         self.FunctionObject = {
             settings.find: find,
             settings.insert: insert,
@@ -40,15 +43,23 @@ class Application(QThread):
             self.Data.buildingDataProtein(self.ManagerApi, protein)
 
     def run(self):
-        self.__buildingData(self.request)
+        if self.operation == 'collect_data':
+            try:
+                self.__buildingData(self.request)
+                self.collect.emit("Данные успешно собраны")
+            except Exception as e:
+                self.error.emit(str(e))
+        else:
+            try:
+                nameFunction = self.request["function"]
+                function = self.FunctionObject[nameFunction]
+                self.Controller.setFunction(function)
+                response = self.Controller.getResponse(self.Data, self.request)
+                self.finished.emit(response)
+            except Exception as e:
+                self.error.emit(str(e))
 
-        nameFunction = self.request["function"]
-        function = self.FunctionObject[nameFunction]
-        self.Controller.setFunction(function)
-        response = self.Controller.getResponse(self.Data, self.request)
-
-        self.finished.emit(response)
-
-    def start_request(self, request):
+    def start_request(self, request, operation):
         self.request = request
+        self.operation = operation
         self.start()

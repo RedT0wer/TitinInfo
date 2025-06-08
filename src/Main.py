@@ -17,12 +17,17 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui = uic.loadUi("mainwindow.ui", self)
         self.__initializationSettings()
 
+        self.app.finished.connect(self.f3)
+        self.app.collect.connect(self.f4)
+        self.app.error.connect(self.f5)
+
         self.ui.table_urls.cellChanged.connect(self.handleCellChanged)
 
+        self.ui.pull_request.clicked.connect(self.PullRequest)
+        self.ui.check_collect_data.stateChanged.connect(self.block_button)
+        self.ui.collect_data.clicked.connect(self.CollectData)
         self.ui.view_domains.clicked.connect(self.viewAllDomains)
         self.ui.view_exons.clicked.connect(self.viewAllExons)
-
-        self.ui.pull_request.clicked.connect(self.PullRequest)
 
         self.ui.find.clicked.connect(self.choiseFunction)
         self.ui.replacement.clicked.connect(self.choiseFunction)
@@ -31,7 +36,9 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.delete_exon.clicked.connect(self.choiseFunction)
 
         self.ui.insert_st.textChanged.connect(self.dinamicChangeNumber)
-        
+        self.ui.origin.textChanged.connect(lambda x: self.ui.check_collect_data.setChecked(False))
+        self.ui.isoform.textChanged.connect(lambda x: self.ui.check_collect_data.setChecked(False))
+
         self.ui.add_url.clicked.connect(self.addRowToTable)
         self.ui.remove_url.clicked.connect(self.removeSelectedRows)
 
@@ -122,23 +129,42 @@ class MyApp(QtWidgets.QMainWindow):
         self.app_finished(str(html), False)
 
     def f3(self, response):
+        """Запрос успешно обработан"""
         html = FabricResponse.getResponse(response)
         self.app_finished(html, False)
+        self.block_button(True)
 
     def PullRequest(self):
         request = self.getRequest()
-        self.app.finished.connect(self.f3)
-        self.app.start_request(request)
-        self.block_button()
+        operation = 'pull_request'
+        self.app.start_request(request, operation)
+        self.ui.response_browser.setHtml("Идет обработка запроса...")
+        self.block_button(False)
 
-    def block_button(self):
-        self.ui.pull_request.setEnabled(False)
+    def f4(self, message):
+        """Данные успешно обработаны"""
+        self.ui.check_collect_data.setChecked(True)
+        self.app_finished(message, False)
+
+    def CollectData(self):
+        request = self.getRequest()
+        operation = 'collect_data'
+        self.app.start_request(request, operation)
         self.ui.response_browser.setHtml("Идет чтение данных...")
+
+    def f5(self, error):
+        """Обработка полученной ошибки"""
+        self.app_finished(error, True)
+        self.block_button(True)
+
+    def block_button(self, status=True):
+        self.ui.pull_request.setEnabled(self.ui.check_collect_data.isChecked() and status)
+        self.ui.view_exons.setEnabled(self.ui.check_collect_data.isChecked() and status)
+        self.ui.view_domains.setEnabled(self.ui.check_collect_data.isChecked() and status)
 
     def app_finished(self, html, status):
         self.ui.response_browser.setHtml(html)
         self.ui.checkException.setChecked(status)
-        self.ui.pull_request.setEnabled(True)
 
     def getRequest(self):
         button = self.getActiveButton()

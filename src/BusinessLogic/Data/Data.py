@@ -34,14 +34,6 @@ class Data:
         self.DictProtein.buildingProtein(self.DictExons, self.DictTranslation)
         self.DictProtein.buildingListObject()
 
-    def buildingData(self, managerApi, protein, nucleotides):
-        self.__nucleotides = nucleotides
-        self.__protein = protein
-        self.DictExons = self.__buildingDictExons(managerApi, nucleotides)
-        self.DictProtein = self.__buildingDictProtein(managerApi, protein)
-        self.DictProtein.buildingProtein(self.DictExons, self.DictTranslation)
-        self.DictProtein.buildingListObject()
-
     def __buildingDictExons(self, managerApi, nucleotides):
         stream1 = managerApi.getData(nucleotides, ensemblSequense if nucleotides.startswith('ENST') else nbciSequense)
         stream2 = managerApi.getData(nucleotides, ensemblExons if nucleotides.startswith('ENST') else nbciExons)
