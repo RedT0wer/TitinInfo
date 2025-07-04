@@ -63,7 +63,13 @@ class MyApp(QtWidgets.QMainWindow):
             else:
                 id = item.text()
                 url = table_widget.item(row, 1).text()
-            UrlsEnv.add_variable_to_env_file(id, url)
+            if not self.__check_key(id):
+                UrlsEnv.add_variable_to_env_file(id, url)
+
+    def __check_key(self, key):
+        urlsEnv = UrlsEnv()
+        dictionary = urlsEnv.model_dump()
+        return key.lower() in dictionary
 
     def __initializationSettings(self):
         urlsEnv = UrlsEnv()
