@@ -6,12 +6,12 @@ import os
 
 class UrlsEnv(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file="BusinessLogic/Settings/urls.env",
+        env_file="Settings/urls.env",
         extra="allow"
     )
 
     @classmethod
-    def add_variable_to_env_file(cls, key: str, value: str, env_file: str = "BusinessLogic/Settings/urls.env"):
+    def add_variable_to_env_file(cls, key: str, value: str, env_file: str = "Settings/urls.env"):
         if not os.path.exists(env_file):
             with open(env_file, 'w') as f:
                 f.write(f"{key}={value}\n")
@@ -31,7 +31,7 @@ class UrlsEnv(BaseSettings):
             f.writelines(lines)
 
     @classmethod
-    def remove_variable_from_env_file(cls, key: str, env_file: str = "BusinessLogic/Settings/urls.env"):
+    def remove_variable_from_env_file(cls, key: str, env_file: str = "Settings/urls.env"):
         if not os.path.exists(env_file):
             print(f"Файл {env_file} не найден.")
             return
